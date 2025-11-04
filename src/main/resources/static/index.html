@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>일정 등록</title>
+</head>
+<body>
+<h1>일정 생성</h1>
+<form id="scheduleForm">
+    <input type="text" id="title" placeholder="제목" required><br><br>
+    <textarea id="content" placeholder="내용" required></textarea><br><br>
+    <input type="text" id="author" placeholder="작성자" required><br><br>
+    <input type="password" id="password" placeholder="비밀번호" required><br><br>
+    <button type="submit">등록</button>
+</form>
+
+<script>
+    document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const data = {
+            title: document.getElementById('title').value,
+            content: document.getElementById('content').value,
+            author: document.getElementById('author').value,
+            password: document.getElementById('password').value
+        };
+
+        const response = await fetch('/schedules', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('일정이 성공적으로 등록되었습니다!');
+        } else {
+            alert('등록 실패... 서버 로그를 확인하세요.');
+        }
+    });
+</script>
+</body>
+</html>
