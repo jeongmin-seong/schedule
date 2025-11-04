@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/schedules")
 @RequiredArgsConstructor
@@ -18,5 +20,15 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> create(@RequestBody CreateScheduleRequest request) {
         ScheduleResponse response = service.create(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ScheduleResponse>> getAll(@RequestParam(value = "authorName", required = false) String authorName) {
+        return ResponseEntity.ok(service.getAll(authorName));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 }

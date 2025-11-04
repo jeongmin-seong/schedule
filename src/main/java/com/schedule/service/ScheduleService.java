@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -23,6 +26,21 @@ public class ScheduleService {
                 .build();
         Schedule saved = repository.save(schedule);
         return toResponse(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScheduleResponse> getAll(String author) {
+        List<Schedule> list = (author == null || author.isBlank())
+                ? repository.findAllByOrderByModifiedAtDesc()
+                : repository.findAllByAuthorOrderByModifiedAtDesc(author);
+        return list.stream().map(this::toResponse).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ScheduleResponse getById(Long id) {
+        Schedule s = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id=" + id));
+        return toResponse(s);
     }
 
     private ScheduleResponse toResponse(Schedule schedule) {
