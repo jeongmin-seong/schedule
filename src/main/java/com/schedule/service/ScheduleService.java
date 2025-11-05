@@ -1,6 +1,7 @@
 package com.schedule.service;
 
 import com.schedule.dto.CreateScheduleRequest;
+import com.schedule.dto.DeleteScheduleRequest;
 import com.schedule.dto.UpdateScheduleRequest;
 import com.schedule.entity.Schedule;
 import com.schedule.repository.ScheduleRepository;
@@ -58,6 +59,17 @@ public class ScheduleService {
 
         Schedule updated = repository.save(schedule);
         return toResponse(updated);
+    }
+
+    @Transactional
+    public void delete(Long id, DeleteScheduleRequest request) {
+        Schedule schedule = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id=" + id));
+
+        if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        repository.deleteById(id);
     }
 
     private ScheduleResponse toResponse(Schedule schedule) {

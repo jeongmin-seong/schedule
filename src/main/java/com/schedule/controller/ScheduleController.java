@@ -1,6 +1,7 @@
 package com.schedule.controller;
 
 import com.schedule.dto.CreateScheduleRequest;
+import com.schedule.dto.DeleteScheduleRequest;
 import com.schedule.dto.ScheduleResponse;
 import com.schedule.dto.UpdateScheduleRequest;
 import com.schedule.service.ScheduleService;
@@ -40,5 +41,11 @@ public class ScheduleController {
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponse> update(@PathVariable Long id, @RequestBody UpdateScheduleRequest request) {
         return ResponseEntity.ok(service.update(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody DeleteScheduleRequest request) {
+        service.delete(id, request);
+        return ResponseEntity.noContent().build();
     }
 }
