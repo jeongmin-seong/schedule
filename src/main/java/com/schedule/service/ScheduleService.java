@@ -1,6 +1,7 @@
 package com.schedule.service;
 
 import com.schedule.dto.CreateScheduleRequest;
+import com.schedule.dto.UpdateScheduleRequest;
 import com.schedule.entity.Schedule;
 import com.schedule.repository.ScheduleRepository;
 import com.schedule.dto.ScheduleResponse;
@@ -38,9 +39,25 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponse getById(Long id) {
-        Schedule s = repository.findById(id)
+        Schedule schedule = repository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id=" + id));
-        return toResponse(s);
+        return toResponse(schedule);
+    }
+
+    @Transactional
+    public ScheduleResponse update(Long id, UpdateScheduleRequest request) {
+        Schedule schedule = repository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("일정을 찾을 수 없습니다. id=" + id)
+        );
+
+        if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalArgumentException("비밀 번호가 일치하지 않습니다.");
+        }
+        if (request.getTitle() != null) schedule.setTitle(request.getTitle());
+        if (request.getAuthor() != null) schedule.setAuthor(request.getAuthor());
+
+        Schedule updated = repository.save(schedule);
+        return toResponse(updated);
     }
 
     private ScheduleResponse toResponse(Schedule schedule) {

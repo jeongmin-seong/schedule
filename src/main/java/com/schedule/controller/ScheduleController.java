@@ -2,6 +2,7 @@ package com.schedule.controller;
 
 import com.schedule.dto.CreateScheduleRequest;
 import com.schedule.dto.ScheduleResponse;
+import com.schedule.dto.UpdateScheduleRequest;
 import com.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleController {
 
+    // 속성
     private final ScheduleService service;
 
+    //생성자
+
+    //기능
     @PostMapping
     public ResponseEntity<ScheduleResponse> create(@RequestBody CreateScheduleRequest request) {
         ScheduleResponse response = service.create(request);
@@ -23,12 +28,17 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> getAll(@RequestParam(value = "authorName", required = false) String authorName) {
+    public ResponseEntity<List<ScheduleResponse>> getAll(@RequestParam(value = "author", required = false) String authorName) {
         return ResponseEntity.ok(service.getAll(authorName));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ScheduleResponse> update(@PathVariable Long id, @RequestBody UpdateScheduleRequest request) {
+        return ResponseEntity.ok(service.update(id, request));
     }
 }
