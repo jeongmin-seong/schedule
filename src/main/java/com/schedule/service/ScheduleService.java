@@ -7,6 +7,7 @@ import com.schedule.entity.Schedule;
 import com.schedule.repository.ScheduleRepository;
 import com.schedule.dto.ScheduleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

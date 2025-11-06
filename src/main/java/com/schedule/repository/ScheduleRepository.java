@@ -14,14 +14,4 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByOrderByModifiedAtDesc();
     List<Schedule> findAllByAuthorOrderByModifiedAtDesc(String authorName);
 
-    @Modifying
-    @Query(value = "ALTER TABLE schedule AUTO_INCREMENT = 1", nativeQuery = true)
-    void resetAutoIncrement();
-
-    @Modifying
-    @Transactional
-    default void deleteAllAndReset() {
-        deleteAll();
-        resetAutoIncrement();
-    }
 }

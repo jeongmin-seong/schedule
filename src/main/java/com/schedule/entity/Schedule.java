@@ -23,32 +23,26 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(nullable = false)
     private String title;
 
-
-    @Lob
+    @Column(nullable = false)
     private String content;
 
 
     @Column(nullable = false)
     private String author;
 
-
     @Column(nullable = false)
-    private String password; // 요청 요구사항에 따라 평문 저장. 실제 서비스에서는 해시 권장
-
+    private String password;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
-
 
     @PrePersist
     public void prePersist() {

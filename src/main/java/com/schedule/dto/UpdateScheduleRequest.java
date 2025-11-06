@@ -1,7 +1,6 @@
 package com.schedule.dto;
 
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 @Data
 @NoArgsConstructor
