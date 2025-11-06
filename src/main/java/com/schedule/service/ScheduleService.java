@@ -85,8 +85,8 @@ public class ScheduleService {
     private void reorderDisplayIds() {
         List<Schedule> all = repository.findAll(Sort.by(Sort.Direction.ASC, "displayId"));
         int newId = 1;
-        for (Schedule s : all) {
-            s.setDisplayId(newId++);
+        for (Schedule schedule : all) {
+            schedule.setDisplayId(newId++);
         }
         repository.saveAll(all);
     }
