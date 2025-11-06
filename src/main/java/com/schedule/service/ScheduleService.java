@@ -7,7 +7,7 @@ import com.schedule.entity.Schedule;
 import com.schedule.repository.ScheduleRepository;
 import com.schedule.dto.ScheduleResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +21,19 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponse create(CreateScheduleRequest reqeust) {
+
+        Integer maxDisplayId = repository.findMaxDisplayId();
+        int nextDisplayId = (maxDisplayId == null) ? 1 : maxDisplayId + 1;
+
         Schedule schedule = Schedule.builder()
                 .title(reqeust.getTitle())
                 .content(reqeust.getContent())
                 .author(reqeust.getAuthor())
                 .password(reqeust.getPassword())
+                .displayId(nextDisplayId)
                 .build();
+
+
         Schedule saved = repository.save(schedule);
         return toResponse(saved);
     }
@@ -71,6 +78,17 @@ public class ScheduleService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         repository.deleteById(id);
+
+        reorderDisplayIds();
+    }
+
+    private void reorderDisplayIds() {
+        List<Schedule> all = repository.findAll(Sort.by(Sort.Direction.ASC, "displayId"));
+        int newId = 1;
+        for (Schedule s : all) {
+            s.setDisplayId(newId++);
+        }
+        repository.saveAll(all);
     }
 
     private ScheduleResponse toResponse(Schedule schedule) {
@@ -78,7 +96,7 @@ public class ScheduleService {
                 .id(schedule.getId())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
-                .author(schedule.getAuthor())
+                  .author(schedule.getAuthor())
                 .createdAt(schedule.getCreatedAt())
                 .modifiedAt(schedule.getModifiedAt())
                 .build();

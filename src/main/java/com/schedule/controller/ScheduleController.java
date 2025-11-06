@@ -29,8 +29,8 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponse>> getAll(@RequestParam(value = "author", required = false) String authorName) {
-        return ResponseEntity.ok(service.getAll(authorName));
+    public ResponseEntity<List<ScheduleResponse>> getAll(@RequestParam(value = "author", required = false) String author) {
+        return ResponseEntity.ok(service.getAll(author));
     }
 
     @GetMapping("/{id}")
